@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+
+import sys
+import subprocess
+import time
+
+colours = {
+	'OK': '\033[92m',
+	'FAIL': '\033[91m',
+	'WARNING': '\033[93m',
+	'OTHER': '\033[94m',
+	'END': '\033[0m'
+}
+
+def exit(message):
+	print message
+	print "Usage: ./smlunit [relative path to test file, e.g. hw-tests/hw1.sml]"
+	sys.exit(1)
+
+def find_first_line(lines):
+	for i, line in enumerate(lines):
+		if line.startswith('*'):
+			return i
+
+# When we're comparing lists (so commas are done differently etc)
+def find_middle_comma(s):
+	n = 0
+	if s.find('[') >= 0:
+		for i, c in enumerate(s):
+			if c == '[':
+				n += 1
+			if c == ']':
+				n -= 1
+			if n == 0:
+				return i + 1
+
+# Preliminary input validation
+if len(sys.argv) < 2:
+	exit("Missing filename")
+
+filename = sys.argv[1]
+try:
+	file = open(filename)
+except IOError:
+	exit("Unable to open file '%s'" % filename)
+
+start_time = time.clock()
+
+command = r'echo "use \"lib/smlunit.sml\"; use \"%s\"" | sml' % filename # lol
+output_lines = subprocess.check_output(command, shell=True).splitlines()
+
+# Ignore all the lines prior to the first test and the last two lines
+first_line = find_first_line(output_lines)
+lines = output_lines[first_line:-2]
+
+# Now remove all the lines after the OK lines
+remove_line = False
+for i, line in enumerate(lines):
+	if remove_line:
+		del lines[i]
+
+	remove_line = line == "OK"
+
+num_ok = 0
+num_fail = 0
+
+# Loop through all the lines again, this time to change all the headings
+# Print it out instead of joining it later to give it that nice fake scrolling effect
+for i, line in enumerate(lines):
+	if line.startswith('*'):
+		status = lines[i+1]
+		real_line = line.strip('*').strip(' ').ljust(70, '.') + colours[status] + status.rjust(4, '.') + colours['END']
+		print real_line
+		if status == 'FAIL':
+			# Figure out the expected and actual values and display those as well
+			result_line = lines[i+2]
+			result = result_line[result_line.find('[') + 1:result_line.rfind(']')]
+			separator_index = find_middle_comma(result)
+			actual = result[:separator_index]
+			expected = result[separator_index+1:]
+			print colours['OTHER'] + "    Expected: " + colours['END'] + expected
+			print colours['OTHER'] + "    Actual: " + colours['END'] + actual
+
+		# Keep track of the number of fails and successes
+		num_ok += status == 'OK'
+		num_fail += status == 'FAIL'
+
+# If there's no runtime or compile-time error, report statistics
+num_tests = num_ok + num_fail
+end_time = time.clock()
+stats_line = "Ran %d test%s in %.3f seconds" % (num_tests, 's' * (num_tests != 1), (end_time - start_time))
+if num_fail > 0:
+	colour = colours['WARNING']
+	stats_line += " (%d failure%s)" % (num_fail, 's' * (num_fail != 1))
+else:
+	colour = colours['OK']
+print
+print colour + "-" * len(stats_line) + colours['END']
+print colour + stats_line + colours['END']
