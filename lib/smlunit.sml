@@ -1,7 +1,3 @@
-(* No generic polymorphic print function possible, but this approximates it *)
-(* See http://www.smlnj.org/doc/FAQ/faq.txt and http://stackoverflow.com/questions/3713948/sml-how-to-check-variable-type *)
-(* datatype wrapper = Int of int | Real of real | String of string | Bool of bool; *)
-
 (* To stop the polyEqual warnings as using polymorphic equality is intentional *)
 Control.polyEqWarn := false;
 
