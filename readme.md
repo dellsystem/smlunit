@@ -38,6 +38,8 @@ See `hw-tests/hw1.sml` for an example test file. The functions you can use are:
 	assertTrue boolean "Description of the test"
 	assertFalse boolean "Description of the test"
 
+Remember to import the file defining the functions you want to test at the top, using `use`. The path should be relative to the root of the git repository (i.e. the directory containing the `smlunit` file). For `hw-tests/hw1.sml`, place the associated `hw1.sml` file in the `hw` directory.
+
 Only use `assertRealEqual` to compare reals. The precision is about 11 decimal points - i.e., it should compare all the decimal points actually visible when you print out the variable. (I'm not completely sure if this works properly. But it seems to.)
 
 Avoid passing parameters of inappropriate types. This is fairly straightforward.
@@ -57,3 +59,4 @@ To do
 * Comparing lists of reals? (Currently not possible)
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
 * Organising tests into sections or test cases. Like in QUnit?
+* Make sure assertRealEqual does what it's supposed to do, and consider changing the name
