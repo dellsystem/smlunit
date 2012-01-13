@@ -1,4 +1,4 @@
-use "../hw/hw1.sml";
+use "hw/hw1.sml";
 
 (* average *)
 assertRealEqual (average [1, 5, 2, 7]) 3.75 				"average test 1";
