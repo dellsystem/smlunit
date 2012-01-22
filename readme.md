@@ -8,7 +8,7 @@ Dependencies
 
 * Python 2.7+
 * [SML/NJ](http://www.smlnj.org/)
-* Not Windows
+* Not Windows (will work on any SOCS machine with Python 2.7 installed - ubuntu, the lab machines, open area, etc; excludes linux, mimi)
 
 Usage notes
 -----------
@@ -66,5 +66,5 @@ To do
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
 * Organising tests into sections or test cases. Like in QUnit?
 * Make it work for python 2.6 (check_output in subprocess, check for version or exceptions or whatever)
-* Optional string descriptions
+* Optional string descriptions - possible?
 * Make sure assertRealEqual does what it's supposed to do, and consider changing the name
