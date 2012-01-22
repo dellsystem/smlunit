@@ -53,10 +53,18 @@ Development notes
 To do
 -----
 
-* Check if it works on the lab machines in Trottier
 * Check for and report run-time and compile-time errors
 * User-defined datatypes?
 * Comparing lists of reals? (Currently not possible)
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
 * Organising tests into sections or test cases. Like in QUnit?
+* Better way to test one function on multiple input cases
+* Make it work for python 2.6 (check_output in subprocess, check for version or exceptions or whatever)
+* Optional string descriptions
+* Catch other errors
 * Make sure assertRealEqual does what it's supposed to do, and consider changing the name
+* -Cprint.depth=100
+
+IS THERE A MISTAKE IN THE PDF???? CHECK IF THERE'S AN UPDATED VERSION oh yeah check her post about errors
+COMMAS IN TUPLES THAT THING
+FOR ASS1 - WHAT IF THERE ARE MULTIPLE CORRECT ANSWERS????

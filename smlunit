@@ -65,6 +65,7 @@ for i, line in enumerate(lines):
 
 num_ok = 0
 num_fail = 0
+sml_error = False
 
 # Loop through all the lines again, this time to change all the headings
 # Print it out instead of joining it later to give it that nice fake scrolling effect
@@ -86,14 +87,26 @@ for i, line in enumerate(lines):
 		# Keep track of the number of fails and successes
 		num_ok += status == 'OK'
 		num_fail += status == 'FAIL'
+	else:
+		# Check if there is an error ...
+		space_index = line.find(' ')
+		if space_index >= 0 and line[space_index+1:].startswith('Error:'):
+			sml_error = True
+			break
 
 # If there's no runtime or compile-time error, report statistics
 num_tests = num_ok + num_fail
 end_time = time.clock()
 stats_line = "Ran %d test%s in %.3f seconds" % (num_tests, 's' * (num_tests != 1), (end_time - start_time))
-if num_fail > 0:
+if num_fail > 0 or sml_error:
 	colour = colours['WARNING']
-	stats_line += " (%d failure%s)" % (num_fail, 's' * (num_fail != 1))
+	if num_fail > 0:
+		stats_line += " (%d failure%s)" % (num_fail, 's' * (num_fail != 1))
+	if sml_error:
+		print
+		print colours['FAIL'] + '****************SML ERROR****************' + colours['END']
+		print '\n'.join(lines[i:])
+		stats_line += " (SML error)"
 else:
 	colour = colours['OK']
 print
