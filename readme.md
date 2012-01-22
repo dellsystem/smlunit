@@ -33,10 +33,19 @@ Don't move any of the files around unless you know what you're doing. Deleting `
 
 See `hw-tests/hw1.sml` for an example test file. The functions you can use are:
 
-	assertEqual actual expected "Description of the test"
-	assertRealEqual actual expected "Description of the test"
-	assertTrue boolean "Description of the test"
-	assertFalse boolean "Description of the test"
+	assertEqual (actual) (expected) "Description of the test";
+	assertRealEqual (actual) (expected) "Description of the test";
+	assertTrue (boolean) "Description of the test";
+	assertFalse (boolean) "Description of the test";
+	(* The below are for testing one function with many test cases *)
+	assertRegulars (function) [
+		((an input), (expected output)),
+		((another input), (expected output))
+	]						"Description of the test";
+	assertReals (function) [
+		((an input), (expected output)),
+		((another input), (expected output))
+	]						"Description of the test";
 
 Remember to import the file defining the functions you want to test at the top, using `use`. The path should be relative to the root of the git repository (i.e. the directory containing the `smlunit` file). For `hw-tests/hw1.sml`, place the associated `hw1.sml` file in the `hw` directory.
 
@@ -53,18 +62,9 @@ Development notes
 To do
 -----
 
-* Check for and report run-time and compile-time errors
-* User-defined datatypes?
 * Comparing lists of reals? (Currently not possible)
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
 * Organising tests into sections or test cases. Like in QUnit?
-* Better way to test one function on multiple input cases
 * Make it work for python 2.6 (check_output in subprocess, check for version or exceptions or whatever)
 * Optional string descriptions
-* Catch other errors
 * Make sure assertRealEqual does what it's supposed to do, and consider changing the name
-* -Cprint.depth=100
-
-IS THERE A MISTAKE IN THE PDF???? CHECK IF THERE'S AN UPDATED VERSION oh yeah check her post about errors
-COMMAS IN TUPLES THAT THING
-FOR ASS1 - WHAT IF THERE ARE MULTIPLE CORRECT ANSWERS????

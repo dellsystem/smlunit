@@ -1,2 +1,3 @@
 # Don't track changes in the homework files
+*.pyc
 hw/*
