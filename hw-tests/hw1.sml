@@ -84,3 +84,12 @@ assertRegulars insert [
 	(((7, "beeb"), t6), t7, "again"),
 	(((11, "biib"), t7), t8, "to the very right of a full balanced tree")
 ] 														"insert";
+
+(* Q3.4: delMin and delete *)
+val t9 = Node((5,"bob"),Node((2,"soo"),Node ((1,"too"),Empty,Empty),Node ((3,"foo"),Empty,Empty)),Node((9,"sob"),Node ((6,"top"),Empty,Empty),Node ((11,"biib"),Empty,Empty)));
+val t10 = Node((6,"top"),Node((2,"soo"),Node ((1,"too"),Empty,Empty),Node ((3,"foo"),Empty,Empty)),Node ((9,"sob"),Empty,Node ((11,"biib"),Empty,Empty)));
+
+assertRegulars delete [
+	((7, t8), t9, "some key"),
+	((5, t9), t10, "another key")
+]														"delete";
