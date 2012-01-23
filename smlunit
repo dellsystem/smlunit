@@ -63,7 +63,7 @@ for i, line in enumerate(lines):
 				last_value_index += 1
 				tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
 			it_line_start = -1
-	if line.startswith('%s:' % filename):
+	if line.startswith('%s:' % filename) or line.startswith('uncaught exception'):
 		sml_error = True
 		break
 
