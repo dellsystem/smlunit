@@ -62,6 +62,8 @@ Development notes
 To do
 -----
 
+* Exception handling
+* Handle ALL the SML errors
 * Comparing lists of reals? (Currently not possible)
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
 * Organising tests into sections or test cases. Like in QUnit?
