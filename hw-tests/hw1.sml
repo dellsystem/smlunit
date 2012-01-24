@@ -88,8 +88,26 @@ assertRegulars insert [
 (* Q3.4: delMin and delete *)
 val t9 = Node((5,"bob"),Node((2,"soo"),Node ((1,"too"),Empty,Empty),Node ((3,"foo"),Empty,Empty)),Node((9,"sob"),Node ((6,"top"),Empty,Empty),Node ((11,"biib"),Empty,Empty)));
 val t10 = Node((6,"top"),Node((2,"soo"),Node ((1,"too"),Empty,Empty),Node ((3,"foo"),Empty,Empty)),Node ((9,"sob"),Empty,Node ((11,"biib"),Empty,Empty)));
-
+val t11 = Node((5, "lol"), Node((2, "lol"), Empty, Empty), Node((6, "lol"), Empty, Empty));
+val t12 = Node((5, "lol"), Empty, Node((6, "lol"), Empty, Empty));
+val t13 = Node((5, "lol"), Node((2, "lol"), Empty, Empty), Node((6, "lol"), Empty, Node((7, "lol"), Empty, Empty)));
+val t14 = Node((6, "lol"), Node((5, "lol"), Empty, Empty), Node((7, "lol"), Empty, Empty));
+val t15 = Node((5, "lol"), Node((2, "lol"), Empty, Empty), Node((7, "lol"), Empty, Empty));
 assertRegulars delete [
-	((7, t8), t9, "some key"),
-	((5, t9), t10, "another key")
+	((7, t8), t9, "the node with key 7"),
+	((5, t9), t10, "the node with key 5"),
+	((2, t11), t12, "node with key 2, no children, still balanced"),
+	((2, t13), t14, "node with key 2, no children, now unbalanced"),
+	((6, t13), t15, "node with key 6, one child, not unbalanced")
 ]														"delete";
+
+val s1 = Node((6, "6"), Node((5, "5"), Empty, Empty), Node((7, "7"), Empty, Empty));
+val s2 = Node((6, "6"), Empty, Node((7, "7"), Empty, Empty));
+val s3 = Node((7, "7"), Empty, Empty);
+val s4 = Node((5, "5"), Node((2, "2"), Empty, Empty), Node((6, "6"), Empty, Node((7, "7"), Empty, Empty)));
+assertRegulars delMin [
+	(s1, (s2, (5, "5")), "just the left child (5)"),
+	(s2, (s3, (6, "6")), "the thing itself (6)"),
+	(s3, (Empty, (7, "7")), "the thing itself when there are no children (7)"),
+	(s4, (s1, (2, "2")), "the left child, rebalance (2)")
+]														"delMin";
