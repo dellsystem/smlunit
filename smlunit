@@ -42,30 +42,35 @@ last_value_index = -1
 sml_error = False
 
 # Parse the SML interpreter output
-for i, line in enumerate(lines):
-	if line.startswith('*'):
-		test = {
-			'status': lines[i+1],
-			'desc': line.strip('*').strip(' '),
-			'values': None
-		}
-		tests.append(test)
-	# Maybe it's a list
-	elif line.startswith('val it ='):
-		# Go until the next line that does not start with a tab
-		it_line_start = i
-	elif not line.startswith("  "):
-		if it_line_start >= 0:
-			blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:i]))
-			blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
-			# Time to update the "values" for another test
-			for actual, expected in zip(blah_list[::2], blah_list[1::2]):
-				last_value_index += 1
-				tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
-			it_line_start = -1
-	if line.startswith('%s:' % filename) or line.startswith('uncaught exception'):
-		sml_error = True
-		break
+try:
+	for i, line in enumerate(lines):
+		if line.startswith('*'):
+			test = {
+				'status': lines[i+1],
+				'desc': line.strip('*').strip(' '),
+				'values': None
+			}
+			tests.append(test)
+		# Maybe it's a list
+		elif line.startswith('val it ='):
+			# Go until the next line that does not start with a tab
+			it_line_start = i
+		elif not line.startswith("  "):
+			if it_line_start >= 0:
+				blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:i]))
+				blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
+				# Time to update the "values" for another test
+				for actual, expected in zip(blah_list[::2], blah_list[1::2]):
+					last_value_index += 1
+					tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
+				it_line_start = -1
+		if line.startswith('%s:' % filename) or line.startswith('uncaught exception'):
+			sml_error = True
+			break
+except ValueError:
+	# This happens if a compiler error causes no tests to run
+	# In that case, just print out everything
+	sml_error = True
 
 # Ctrl+C, Ctrl+V. Awful - fix
 if it_line_start >= 0:
