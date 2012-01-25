@@ -97,13 +97,13 @@ val t16 = Node((5, "5"), Node((2, "2"), Empty, Node((3, "3"), Empty, Empty)), No
 val t17 = Node((7, "7"), Node((5, "5"), Node((2, "2"), Empty, Empty), Node((6, "6"), Empty, Empty)), Node((9, "9"), Empty, Node((11, "11"), Empty, Empty)));
 val t18 = Node((7, "7"), Node((5, "5"), Node((3, "3"), Empty, Empty), Node((6, "6"), Empty, Empty)), Node((9, "9"), Empty, Node((11, "11"), Empty, Empty)));
 assertRegulars delete [
-	((7, t8), t9, "the node with key 7"),
-	((5, t9), t10, "the node with key 5"),
-	((2, t11), t12, "node with key 2, no children, still balanced"),
-	((2, t13), t14, "node with key 2, no children, now unbalanced"),
-	((6, t13), t15, "node with key 6, one child, not unbalanced"),
-	((3, t16), t17, "node with no children, now unbalanced (needs rotRight)"),
-	((2, t16), t18, "node with one child, now unbalanced (needs rotRight)")
+	((t8, 7), t9, "the node with key 7"),
+	((t9, 5), t10, "the node with key 5"),
+	((t11, 2), t12, "node with key 2, no children, still balanced"),
+	((t13, 2), t14, "node with key 2, no children, now unbalanced"),
+	((t13, 6), t15, "node with key 6, one child, not unbalanced"),
+	((t16, 3), t17, "node with no children, now unbalanced (needs rotRight)"),
+	((t16, 2), t18, "node with one child, now unbalanced (needs rotRight)")
 ]														"delete";
 
 val s1 = Node((6, "6"), Node((5, "5"), Empty, Empty), Node((7, "7"), Empty, Empty));
