@@ -66,6 +66,7 @@ To do
 * Handle ALL the SML errors
 * Comparing lists of reals? (Currently not possible)
 * Consider actually compiling things instead of this ridiculous echo/piping stuff
+* Show warnings (at the end or something)
 * Organising tests into sections or test cases. Like in QUnit?
 * Make it work for python 2.6 (check_output in subprocess, check for version or exceptions or whatever)
 * Optional string descriptions - possible?
