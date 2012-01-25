@@ -17,7 +17,7 @@ Usage notes
 
 Set the `smlunit` file to executable (`chmod +x smlunit`). You can then run it from the command line as follows:
 
-`smlunit hw-tests/hw1.sml`
+`./smlunit hw-tests/hw1.sml`
 
 replacing `hw-tests/hw1.sml` with the desired test.
 
@@ -39,12 +39,12 @@ See `hw-tests/hw1.sml` for an example test file. The functions you can use are:
 	assertFalse (boolean) "Description of the test";
 	(* The below are for testing one function with many test cases *)
 	assertRegulars (function) [
-		((an input), (expected output)),
-		((another input), (expected output))
+		((an input), (expected output), "Description"),
+		((another input), (expected output), "Description")
 	]						"Description of the test";
 	assertReals (function) [
-		((an input), (expected output)),
-		((another input), (expected output))
+		((an input), (expected output), "Description"),
+		((another input), (expected output), "Description")
 	]						"Description of the test";
 
 Remember to import the file defining the functions you want to test at the top, using `use`. The path should be relative to the root of the git repository (i.e. the directory containing the `smlunit` file). For `hw-tests/hw1.sml`, place the associated `hw1.sml` file in the `hw` directory.
