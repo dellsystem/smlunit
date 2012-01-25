@@ -35,12 +35,14 @@ val t1 = Node ((7,"a"), Node ((3,"b"), Empty, Empty), Node ((9,"c"), Empty, Empt
 val t2 = Node ((3, "lol"), Node ((2, "lol2"), Empty, Empty), Empty);
 val t3 = Node ((2, "f"), Empty, t1);
 val t4 = Node ((3, "lol"), Empty, Empty);
+val t5 = Node((5,1),Node((4,1),Node((3,1),Node((2,1),Empty,Empty),Empty),Empty),Node((6,1),Empty,Node((7,1),Empty,Node((8,1),Empty,Empty))));
 
 assertTrue (balanced Empty)								"An empty tree";
 assertTrue (balanced t1)								"A balanced tree";
 assertTrue (balanced t2)								"A balanced tree (diff of 1)";
 assertFalse (balanced t3)								"An unbalanced tree";
 assertTrue (balanced t4)								"A balanced tree (only one node)";
+assertFalse (balanced t5)								"An unbalanced tree (root's subtrees are degenerate)";
 
 (* Q3.2, first part: rotLeft, rotLeftRight, rotRight, rotRightLeft *)
 val t1 = Node((5, "a"), Node((1, "b"), Node((4, "lol"), Empty, Empty), Empty), Empty);
