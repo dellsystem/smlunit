@@ -56,13 +56,14 @@ assertEqual (rotLeft t1) t1_correct						"rotLeft (left rotation)";
 assertEqual (rotLeftRight t2) t2_correct				"rotLeftRight (left-right rotation)";
 assertEqual (rotRight t3) t3_correct					"rotRight (right rotation)";
 assertEqual (rotRightLeft t4) t4_correct				"rotRightLeft (right-left rotation)";
-(* Q3.2, second part: rebalance *)
-assertRegulars rebalance [
+
+(* Q3.2, second part: balance *)
+assertRegulars balance [
 	(t1, t1_correct, "with rotLeft"),
 	(t2, t2_correct, "with rotLeftRight"),
 	(t3, t3_correct, "with rotRight"),
 	(t4, t4_correct, "with rotRightLeft")
-]														"rebalance";
+]														"balance";
 
 (* Q3.3: insert *)
 val t1 = Node((3, "foo"), Empty, Empty);
