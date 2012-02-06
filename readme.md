@@ -62,6 +62,7 @@ Development notes
 To do
 -----
 
+* If there are no tests ...
 * Exception handling
 * Handle ALL the SML errors
 * Comparing lists of reals? (Currently not possible)
@@ -71,3 +72,4 @@ To do
 * Make it work for python 2.6 (check_output in subprocess, check for version or exceptions or whatever)
 * Optional string descriptions - possible?
 * Make sure assertRealEqual does what it's supposed to do, and consider changing the name
+* assertRegulars etc CANNOT take more than one parameter (if you can't use tuples, can't use them)
