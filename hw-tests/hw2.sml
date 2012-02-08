@@ -12,3 +12,18 @@ assertEqual (zipWith (fn (x, y) => x - y) [1, 2, 3] [0, 1]) [1, 1] "zipWith - un
 (* Q3.2: ziprev *)
 assertEqual (ziprev [1,2,3,4] [10,20,30,40]) [(1,40),(2,30),(3,20),(4,10)] "ziprev - sum";
 assertEqual (ziprev ["a", "b", "c"] [4, 3, 2, 1]) [("a", 1), ("b", 2), ("c", 3)] "ziprev - unequal";
+
+
+(* Q4.1 and 4.2 create and AlonzoToInt *)
+val zero = create 0:int numeral;
+val one = create 1:int numeral;
+val ninethousand = create 9000:int numeral;
+assertEqual (AlonzoToInt(zero)) 0 "AlonzoToInt and create - zero";
+assertEqual (AlonzoToInt(one)) 1 "AlonzoToInt and create - one";
+assertEqual (AlonzoToInt(ninethousand)) 9000 "AlonzoToInt and create - large number";
+
+(* Q4.3 SUC *)
+assertEqual (AlonzoToInt(SUC(zero))) 1 "successor of zero";
+assertEqual (AlonzoToInt(SUC(one))) 2 "successor of one";
+assertEqual (AlonzoToInt(SUC(ninethousand))) 9001 "successor of a large number";
+assertEqual (AlonzoToInt(SUC(SUC(SUC(ninethousand))))) 9003 "chaining successor of a large number";
