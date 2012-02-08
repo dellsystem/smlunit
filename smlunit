@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 import sys
 import subprocess
@@ -31,7 +31,7 @@ except IOError:
 start_time = time.time()
 
 command = r'echo "use \"lib/smlunit.sml\"; use \"%s\"" | sml -Cprint.depth=100 -Cprint.length=1000' % filename # lol
-output_lines = subprocess.check_output(command, shell=True).splitlines()
+output_lines = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE).communicate()[0].splitlines()
 
 # Ignore all the lines prior to the first test and the last two lines
 first_line = utils.find_first_line(output_lines)
