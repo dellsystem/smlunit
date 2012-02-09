@@ -49,7 +49,7 @@ assertEqual (AlonzoToInt(SUC(SUC(SUC(ninethousand))))) 9003 "chaining successor 
 assertEqual (AlonzoToInt(#1 (PRED(create 9002)))) 9001 "first element in PRED tuple with non zero";
 assertEqual (AlonzoToInt(#2 (PRED(create 9002)))) 9002 "second element in PRED tuple with non zero";
 assertEqual (AlonzoToInt(#1 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
-assertEqual (AlonzoToInt(#2 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
+assertEqual (AlonzoToInt(#2 (PRED(create 0)))) 0 "second element in PRED tuple with zero";
 
 (* ADD *)
 assertEqual (AlonzoToInt(ADD(create 0, create 5))) 5 "zero and non zero";
