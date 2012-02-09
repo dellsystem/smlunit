@@ -30,6 +30,13 @@ assertEqual (AlonzoToInt(SUC(zero))) 1 "successor of zero";
 assertEqual (AlonzoToInt(SUC(one))) 2 "successor of one";
 assertEqual (AlonzoToInt(SUC(ninethousand))) 9001 "successor of a large number";
 assertEqual (AlonzoToInt(SUC(SUC(SUC(ninethousand))))) 9003 "chaining successor of a large number";
+
+(* Q4.4 PRED *)
+assertEqual (AlonzoToInt(#1 (PRED(create 9002)))) 9001 "first element in PRED tuple with non zero";
+assertEqual (AlonzoToInt(#2 (PRED(create 9002)))) 9002 "second element in PRED tuple with non zero";
+assertEqual (AlonzoToInt(#1 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
+assertEqual (AlonzoToInt(#2 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
+
 (* ADD *)
 assertEqual (AlonzoToInt(ADD(create 0, create 5))) 5 "zero and non zero";
 assertEqual (AlonzoToInt(ADD(create 0, create 0))) 0 "zero and zero";
