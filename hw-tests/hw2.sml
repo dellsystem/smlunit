@@ -59,3 +59,10 @@ assertEqual (AlonzoToInt(ADD(create 4500, create 4501))) 9001 "non zero and non 
 assertEqual (AlonzoToInt(MULT(create 5, create 11))) 55 "non zero and non zero";
 assertEqual (AlonzoToInt(MULT(create 0, create 11))) 0 "zero and non zero";
 assertEqual (AlonzoToInt(MULT(create 0, create 0))) 0 "zero and zero";
+
+(* POW *)
+assertEqual (AlonzoToInt(POW(create 5,create 2))) 25 "non zero to the power of non zero";
+assertEqual (AlonzoToInt(POW(create 0,create 5))) 0 "zero to the power of non zero";
+assertEqual (AlonzoToInt(POW(create 5,create 0))) 1 "non zero to the power of zero";
+assertEqual (AlonzoToInt(POW(create 0,create 0))) 1 "zero to the power of zero";
+assertEqual (AlonzoToInt(POW(create 1,create 9000))) 1 "one to the power of non zero";
