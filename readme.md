@@ -73,3 +73,4 @@ To do
 * Optional string descriptions - possible?
 * Make sure assertRealEqual does what it's supposed to do, and consider changing the name
 * assertRegulars etc CANNOT take more than one parameter (if you can't use tuples, can't use them)
+* breaks when the last test fails (the expected, actual values aren't correct)
