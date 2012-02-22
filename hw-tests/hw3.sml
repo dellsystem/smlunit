@@ -3,6 +3,7 @@ due to datatype redeclarations etc. The trie datatype and function declarations 
 all be in hw/hw3-1.sml. *)
 use "hw/hw3-1.sml";
 
+
 (* Q1.1: insert *)
 val t1 = insert ("b", []);
 
@@ -185,3 +186,19 @@ assertEqual t8_2_1_1_1_c #"d"					"eighth tree - bread";
 assertEqual (!(hd t8_2_1_1_1_l)) Empty			"eighth tree - bread, then empty";
 assertEqual t8_2_1_2_c #"e"						"eighth tree - bree";
 assertEqual (!(hd t8_2_1_2_l)) Empty			"eighth tree - bree, then empty";
+
+
+
+(* Q1.2: all_words*)
+
+assertEqual (all_entries t1) ["b"]
+assertEqual (all_entries t2) ["be","boo","boo","book","bool"]
+assertEqual (all_entries t3) ["be","boo","boo","book","bool"]
+assertEqual (all_entries t4) ["be","boo","boo","book","bool"]
+assertEqual (all_entries t5) ["be","boo","boo","book","bool"]
+assertEqual (all_entries t6) ["be","boo","boo","book","bool"]
+assertEqual (all_entries t7) ["b","d"]
+assertEqual (all_entries t8) ["beer","bee","beef","beefy","beard","bread","bree"]
+
+
+
