@@ -1,5 +1,19 @@
 use "hw/hw2.sml";
 
+(* Q2: newton *)
+val linear = fn x => 2.0 * x + 5.0;
+val quadratic = fn x => x * x - 3.0 * x;
+(* assumes that you use 0.000000001 for your dx because why not *)
+assertReals newton [
+	((linear, 1.0, 0.05), ~2.49999971041, "Greater than zero, large tolerance"),
+	((linear, 1.0, 0.0000001), ~2.5, "Greater than zero, small tolerance"),
+	((linear, ~2.6, 0.0000001), ~2.50000000827, "Smaller than zero, small tolerance"),
+	((linear, ~2.5, 0.0000001), ~2.5, "Exactly the zero, small tolerance"),
+	((quadratic, 2.5, 0.0000001), 3.00000000002, "Smaller than zero, quadratic"),
+	((quadratic, 3.5, 0.0000001), 3.0, "Greater than zero, quadratic"),
+	((quadratic, 3.0, 0.0000001), 3.0, "Exactly the zero, quadratic")
+]																				"newton";
+
 (* Q3.1: zipWith *)
 (* Can't use assertRegulars because that can only take one argument *)
 assertEqual (zipWith (fn (x, y) => x + y) [1,2,3,4] [10,20,30,40]) [11, 22, 33, 44] "zipWith - sum";
@@ -35,7 +49,7 @@ assertEqual (AlonzoToInt(SUC(SUC(SUC(ninethousand))))) 9003 "chaining successor 
 assertEqual (AlonzoToInt(#1 (PRED(create 9002)))) 9001 "first element in PRED tuple with non zero";
 assertEqual (AlonzoToInt(#2 (PRED(create 9002)))) 9002 "second element in PRED tuple with non zero";
 assertEqual (AlonzoToInt(#1 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
-assertEqual (AlonzoToInt(#2 (PRED(create 0)))) 0 "first element in PRED tuple with zero";
+assertEqual (AlonzoToInt(#2 (PRED(create 0)))) 0 "second element in PRED tuple with zero";
 
 (* ADD *)
 assertEqual (AlonzoToInt(ADD(create 0, create 5))) 5 "zero and non zero";
