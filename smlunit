@@ -3,35 +3,38 @@
 import sys
 import subprocess
 import time
+import os.path
 from lib import utils
 
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
 colours = {
-	'OK': '\033[92m',
-	'FAIL': '\033[91m',
-	'WARNING': '\033[93m',
-	'OTHER': '\033[94m',
-	'END': '\033[0m'
+    'OK': '\033[92m',
+    'FAIL': '\033[91m',
+    'WARNING': '\033[93m',
+    'OTHER': '\033[94m',
+    'END': '\033[0m'
 }
 
 def exit(message):
-	print message
-	print "Usage: ./smlunit [relative path to test file, e.g. hw-tests/hw1.sml]"
-	sys.exit(1)
+    print(message)
+    print("Usage: ./smlunit [relative path to test file, e.g. hw-tests/hw1.sml]")
+    sys.exit(1)
 
 # Preliminary input validation
 if len(sys.argv) < 2:
-	exit("Missing filename")
+    exit("Missing filename")
 
 filename = sys.argv[1]
 try:
-	file = open(filename)
+    file = open(filename)
 except IOError:
-	exit("Unable to open file '%s'" % filename)
+    exit("Unable to open file '%s'" % filename)
 
 start_time = time.time()
 
-command = r'echo "use \"lib/smlunit.sml\"; use \"%s\"" | sml -Cprint.depth=100 -Cprint.length=1000' % filename # lol
-output_lines = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE).communicate()[0].splitlines()
+command = r'echo "use \"%s/lib/smlunit.sml\"; use \"%s\"" | sml -Cprint.depth=100 -Cprint.length=1000' % (SCRIPT_DIR, filename) # lol
+output_lines = subprocess.Popen(command, shell=True,stdout=subprocess.PIPE, text=True).communicate()[0].splitlines()
 
 # Ignore all the lines prior to the first test and the last two lines
 first_line = utils.find_first_line(output_lines)
@@ -43,59 +46,61 @@ sml_error = False
 
 # Parse the SML interpreter output
 try:
-	for i, line in enumerate(lines):
-		if line.startswith('*'):
-			test = {
-				'status': lines[i+1],
-				'desc': line.strip('*').strip(' '),
-				'values': None
-			}
-			tests.append(test)
-		# Maybe it's a list
-		elif line.startswith('val it ='):
-			# Go until the next line that does not start with a tab
-			it_line_start = i
-		elif not line.startswith("  "):
-			if it_line_start >= 0:
-				blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:i]))
-				blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
-				# Time to update the "values" for another test
-				for actual, expected in zip(blah_list[::2], blah_list[1::2]):
-					last_value_index += 1
-					tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
-				it_line_start = -1
-		if line.startswith('%s:' % filename) or line.startswith('uncaught exception'):
-			sml_error = True
-			break
+    for i, line in enumerate(lines):
+        if line.startswith('*'):
+            test = {
+                'status': lines[i+1],
+                'desc': line.strip('*').strip(' '),
+                'values': None
+            }
+            tests.append(test)
+        # Maybe it's a list
+        elif line.startswith('val it ='):
+            # Go until the next line that does not start with a tab
+            it_line_start = i
+        elif not line.startswith("  "):
+            if it_line_start >= 0:
+                blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:i]))
+                blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
+                # Time to update the "values" for another test
+                for actual, expected in zip(blah_list[::2], blah_list[1::2]):
+                    last_value_index += 1
+                    tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
+                it_line_start = -1
+        if line.startswith('%s:' % filename) or line.startswith('uncaught exception'):
+            sml_error = True
+            break
 except ValueError:
-	# This happens if a compiler error causes no tests to run
-	# In that case, just print out everything
-	sml_error = True
+    # This happens if a compiler error causes no tests to run
+    # In that case, just print(out everything)
+    sml_error = True
 
 # Ctrl+C, Ctrl+V. Awful - fix
 if it_line_start >= 0:
-	blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:]))
-	try:
-		blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
-	except ValueError:
-		pass
-	# Time to update the "values" for another test
-	for actual, expected in zip(blah_list[::2], blah_list[1::2]):
-		last_value_index += 1
-		tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
+    blah = ''.join(map(lambda x: x.strip(), lines[it_line_start:]))
+    try:
+        blah_list = utils.parse_as_list(blah[blah.index('[')+1:blah.rindex(']')])
+    except ValueError:
+        pass
+    # Time to update the "values" for another test
+    for actual, expected in zip(blah_list[::2], blah_list[1::2]):
+        last_value_index += 1
+        # ignore the last 'val it = () : unit` line
+        if last_value_index < len(tests):
+            tests[last_value_index]['values'] = {'expected': expected, 'actual': actual}
 
 num_ok = len([test for test in tests if test['status'] == 'OK'])
 num_fail = len([test for test in tests if test['status'] == 'FAIL'])
 
-# Print out test statuses
+# print(out test statuses)
 for test in tests:
-	status = test['status']
-	expected = test['values']['expected'] if test['values'] is not None else "LOLIDK"
-	actual = test['values']['actual'] if test['values'] is not None else "LOLIDK"
-	print test['desc'].ljust(70, '.') + colours[status] + status.rjust(4, '.') + colours['END']
-	if status == 'FAIL':
-		print colours['OTHER'] + "    Expected: " + colours['END'] + expected
-		print colours['OTHER'] + "    Actual: " + colours['END'] + actual
+    status = test['status']
+    expected = test['values']['expected'] if test['values'] is not None else "LOLIDK"
+    actual = test['values']['actual'] if test['values'] is not None else "LOLIDK"
+    print(test['desc'].ljust(70, '.') + colours[status] + status.rjust(4, '.') + colours['END'])
+    if status == 'FAIL':
+        print(colours['OTHER'] + "    Expected: " + colours['END'] + expected)
+        print(colours['OTHER'] + "    Actual: " + colours['END'] + actual)
 
 # Report statistics
 num_tests = len(tests)
@@ -103,15 +108,15 @@ end_time = time.time()
 stats_line = "Ran %d test%s in %.3f seconds" % (num_tests, 's' * (num_tests != 1), (end_time - start_time))
 
 if num_fail > 0:
-	stats_line += " (%d failure%s)" % (num_fail, 's' * (num_fail != 1))
-	
+    stats_line += " (%d failure%s)" % (num_fail, 's' * (num_fail != 1))
+    
 if sml_error:
-	print
-	print colours['FAIL'] + '****************SML ERROR****************' + colours['END']
-	print '\n'.join(lines[i:])
-	stats_line += " (SML error)"
+    print()
+    print(colours['FAIL'] + '****************SML ERROR****************' + colours['END'])
+    print('\n'.join(lines[i:]))
+    stats_line += " (SML error)"
 
 colour = colours['WARNING'] if sml_error or num_fail > 0 else colours['OK']
-print
-print colour + "-" * len(stats_line) + colours['END']
-print colour + stats_line + colours['END']
+print()
+print(colour + "-" * len(stats_line) + colours['END'])
+print(colour + stats_line + colours['END'])

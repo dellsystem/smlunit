@@ -37,7 +37,7 @@ def get_values_list(lines, start, end):
 	try:
 		return parse_as_list(string[string.index('[') + 1:string.rindex(']')])
 	except ValueError:
-		print string
+		print(string)
 
 if __name__ == '__main__':
 	class TestShit(unittest.TestCase):
