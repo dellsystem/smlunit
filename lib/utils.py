@@ -13,9 +13,19 @@ def parse_as_list(string):
 	"""
 	unclosed_lists = 0
 	unclosed_tuples = 0
+	unclosed_quote = ''
 	start_index = 0
 	the_list = []
 	for i, c in enumerate(string):
+		if c in '\'"':
+			if unclosed_quote == '':
+				unclosed_quote = c
+			elif unclosed_quote == c:
+				unclosed_quote = ''
+
+		if unclosed_quote != '':
+			continue	# We are in quoted string
+
 		if c == '[':
 			unclosed_lists += 1
 		if c == ']':
@@ -24,6 +34,7 @@ def parse_as_list(string):
 			unclosed_tuples += 1
 		if c == ')':
 			unclosed_tuples -= 1
+
 		if unclosed_lists == 0 and unclosed_tuples == 0 and c == ',':
 			this_item = string[start_index:i]
 			the_list.append(this_item)
